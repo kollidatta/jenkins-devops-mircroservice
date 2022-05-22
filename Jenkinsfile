@@ -67,8 +67,8 @@ pipeline{
 			steps{
 				script{
 					docker.WithRegistry('','dockerhub'){
-						dockerImage.push();
-						dockerImage.push('latest');
+						DockerImage.push();
+						DockerImage.push('latest');
 					}
 				}
 
