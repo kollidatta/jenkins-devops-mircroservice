@@ -47,6 +47,32 @@ pipeline{
 				echo "mvn failsafe:integration-test failsafe:verify"
 			}
 		}
+
+		stage('Package'){
+			steps{
+				sh "mvn package -DskipTests"
+			}
+		}
+		
+		stage('Build Docker IMage'){
+			steps{
+				script{
+					DockerImage = docker.build("kollidatta/currency-exchange-devops:${env.BUILD_TAG}")
+				}
+			}
+		}
+		
+		stage('Push Docker Image'){
+			steps{
+				script{
+					docker.WithRegistry('','dockerhub'){
+						dockerImage.push();
+						dockerImage.push('latest');
+					}
+				}
+
+			}
+		}
 	}	
 	post {
 			always{
